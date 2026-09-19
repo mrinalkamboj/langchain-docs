@@ -3,7 +3,8 @@ LangChain code for simple Agent Invocation and Tool call
 '''
 
 #import agent
-from langchain_docs.langchain.init import agent
+# pyrefly: ignore [missing-import]
+from langchain_docs.langchain.langchain.init import agent
 
 # System Prompt Message
 from langchain_docs.prompts.system import information_research as system_information_research
@@ -20,4 +21,4 @@ result = agent.invoke(
 )
 
 #printing result
-format_response(result, title="Agent Response")
+format_response(result, title="Agent Response").lan

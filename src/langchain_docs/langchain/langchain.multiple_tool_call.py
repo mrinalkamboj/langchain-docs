@@ -7,7 +7,7 @@ import os
 from langchain_core.messages import AIMessageChunk
 
 #import agent
-from langchain_docs.langchain.init import agent, MARKDOWN_DIR
+from langchain_docs.langchain.langchain.init import agent, MARKDOWN_DIR
 
 # System Prompt Message
 from langchain_docs.prompts.system import information_research as system_information_research

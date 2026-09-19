@@ -1,7 +1,7 @@
 [project]
 name = "langchain-docs"
 version = "0.1.0"
-description = "Add your description here"
+description = "Understanding the Langchain via official documentation"
 readme = "README.md"
 authors = [
     { name = "Mrinal Kamboj", email = "mrinal.technology@gmail.com" }
