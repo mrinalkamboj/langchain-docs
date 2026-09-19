@@ -12,6 +12,7 @@ load_dotenv()
 
 # pip install -qU langchain "langchain[openai]" langchain-tavily
 from langchain.agents import create_agent
+from langchain_core.messages import AIMessageChunk
 from langchain_openai import ChatOpenAI
 
  # Pretty terminal formatter for the agent response (Markdown, bullets, panels)
@@ -55,22 +56,37 @@ agent = create_agent(
 async def main():
     # Non-blocking invocation: agent.ainvoke() returns a coroutine, so the event loop
     # stays free while the agent waits on the LLM / tool calls (unlike .invoke())
-    result = await agent.ainvoke(
-        {"messages": [
-            {"role": "system", "content":system_information_research}, # system prompt set explicitly on the message list
-            {"role": "user", "content": "How does AI agents manage memory?"}, # user prompt
-        ]}
-    )
+    
+    # Model Call (Async)
+    # result = await agent.ainvoke(
+    #     {"messages": [
+    #         {"role": "system", "content":system_information_research}, # system prompt set explicitly on the message list
+    #         {"role": "user", "content": "How does AI agents manage memory?"}, # user prompt
+    #     ]}
+    # )    
 
-   
-    format_response(result, title="AI Agents Memory Management(Tavily Search)")
+    # Formatted Response
+    # format_response(result, title="AI Agents Memory Management(Tavily Search)")
 
     # --- Streaming variant (token-by-token, also non-blocking) ---
-    # async for chunk, metadata in agent.astream(
-    #     {"messages": [{"role": "user", "content": "What is the latest news about LangChain?"}]},
-    #     stream_mode="messages",
-    # ):
-    #     print(chunk.content, end="", flush=True)
+    streamed_result = None
+    async for chunk, metadata in agent.astream(
+        {"messages": [
+            {"role": "system", "content":system_information_research}, # system prompt set explicitly on the message list
+            {"role": "user", "content": "How does AI agents manage memory?"}
+            ]
+        },
+        stream_mode="messages",
+    ):
+        if isinstance(chunk, AIMessageChunk):
+            print(chunk.content, end="", flush=True)
+            if streamed_result is None or not isinstance(streamed_result, AIMessageChunk) or getattr(streamed_result, "id", None) != getattr(chunk, "id", None):
+                streamed_result = chunk
+            else:
+                streamed_result = streamed_result + chunk
+
+    # if streamed_result:
+    #     format_response({"messages": [streamed_result]}, title="AI Agents Memory Management(Tavily Search)")
 
 # Run the event loop
 asyncio.run(main())
