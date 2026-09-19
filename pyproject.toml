@@ -1,0 +1,22 @@
+[project]
+name = "langchain-docs"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Mrinal Kamboj", email = "mrinal.technology@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "langchain-tavily>=0.2.18",
+    "langchain[openai]>=1.4.0",
+    "rich>=14.0.0",
+]
+
+[project.scripts]
+langchain-docs = "langchain_docs:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
