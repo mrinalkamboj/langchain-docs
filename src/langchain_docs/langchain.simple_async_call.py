@@ -10,6 +10,11 @@ load_dotenv()
 # pip install -qU langchain "langchain[openai]"
 from langchain.agents import create_agent
 from langchain_openai import ChatOpenAI
+# Pretty terminal formatter for the agent response (Markdown, bullets, panels)
+from langchain_docs.formatting import format_response
+
+#Prompts Message
+from Prompts.System import information_research as system_information_research
 
 # Nous Research Inference Server (OpenAI-compatible endpoint)
 llm = ChatOpenAI(
@@ -34,16 +39,13 @@ agent = create_agent(
     # system_prompt="You are a helpful assistant", # system prompt for initial direction and the role play
 )
 
-#Invoking an agent
+#Invoking an agent asynchronously
 result = agent.invoke(
     {"messages": [
-        {"role": "system", "content": "You are a helpful assistant"}, # system prompt set explicitly on the message list
+        {"role": "system", "content":system_information_research}, # system prompt set explicitly on the message list
         {"role": "user", "content": "What's the weather in San Francisco?"}, # user prompt
     ]}
 )
 
-# Pretty terminal formatter for the agent response (Markdown, bullets, panels)
-from langchain_docs.formatting import format_response
-
 #printing result
-format_response(result, title="Weather Agent Response")
+format_response(result, title="Agent Response")

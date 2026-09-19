@@ -13,12 +13,13 @@ from rich.text import Text
 _console = Console()
 
 
-def format_response(result: dict, title: str = "Agent Response") -> None:
+def format_response(result: dict, title: str = "Agent Response", question: str | None = None) -> None:
     """Pretty-print the final agent response from a create_agent result dict.
 
     - Renders Markdown (bullets, headers, bold, code blocks) natively
     - Falls back to plain text for non-text content blocks
     - Wraps everything in a titled panel with a subtle border
+    - Optionally shows the user question asked, above the answer
     """
     final_message = result["messages"][-1]
     blocks = getattr(final_message, "content_blocks", None) or []
@@ -26,6 +27,10 @@ def format_response(result: dict, title: str = "Agent Response") -> None:
     _console.print()
     _console.rule(f"[bold cyan]{title}[/bold cyan]")
     _console.print()
+
+    if question:
+        _console.print(Panel(question, title="Question Asked", border_style="green"))
+        _console.print()
 
     if not blocks:
         # Simple string content (no structured blocks)
